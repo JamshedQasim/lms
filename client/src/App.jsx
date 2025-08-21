@@ -12,6 +12,7 @@ import AddCourse from "./pages/educator/AddCourse";
 import MyCourses from "./pages/educator/MyCourses";
 import StudentsEnrolled from "./pages/educator/StudentsEnrolled";
 import Navbar from "./components/student/Navbar";
+import Login from "./pages/student/Login";
 const App = () => {
   return (
     <div classname='text-default min-h-screen bg-white'>
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/my-enrollments' element={<MyEnrollments/>}/>
         <Route path='/player/:courseId' element={<Player/>}/>
         <Route path='loading/:path' element={<Loading/>}/>
+        <Route path='/login' element={<Login/>}/>
         <Route path='/educator' element={<Educator/>}/>
         <Route path='educator' element={<Dashboard/>}/>
         <Route path='add-course' element={<AddCourse/>}/>
