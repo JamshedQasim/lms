@@ -5,11 +5,14 @@ import User from "../models/User.js";
 export const clerkWebhook = async (req, res) => { 
     try {
         const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
-        await webhook.verify(JSON.stringify(req.body){
-            id: req.headers["svix-id"],
-            timestamp: req.headers["svix-timestamp"],
-            signature: req.headers["svix-signature"]
-        });
+        await webhook.verify(
+            JSON.stringify(req.body),
+            {
+                id: req.headers["svix-id"],
+                timestamp: req.headers["svix-timestamp"],
+                signature: req.headers["svix-signature"]
+            }
+        );
         const { data, type } = req.body;
         switch (type) {
             case "user.created": {
@@ -51,5 +54,5 @@ export const clerkWebhook = async (req, res) => {
         console.error("Error processing webhook:", error);
         res.status(400).json({ message: "Invalid webhook" });
     }
-    
+
 };
