@@ -6,7 +6,7 @@ import CourseDetails from "./pages/student/CourseDetails";
 import MyEnrollments from "./pages/student/MyEnrollments";
 import Player from "./pages/student/Player";
 import Loading from "./components/student/Loading";
-import Educator from "./pages/educator/Educator";
+
 import Dashboard from "./pages/educator/Dashboard";
 import AddCourse from "./pages/educator/AddCourse";
 import MyCourses from "./pages/educator/MyCourses";
@@ -15,8 +15,7 @@ import Navbar from "./components/student/Navbar";
 import Login from "./pages/student/Login";
 const App = () => {
   return (
-    <div classname='text-default min-h-screen bg-white'>
-      <Navbar />
+    <div className='text-default min-h-screen bg-white'>
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path='/Course-list' element={<CoursesList/>}/>
@@ -26,11 +25,10 @@ const App = () => {
         <Route path='/player/:courseId' element={<Player/>}/>
         <Route path='loading/:path' element={<Loading/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/educator' element={<Educator/>}/>
-        <Route path='educator' element={<Dashboard/>}/>
-        <Route path='add-course' element={<AddCourse/>}/>
-        <Route path='my-courses' element={<MyCourses/>}/>
-        <Route path='student-enrolled' element={<StudentsEnrolled/>}/>
+        <Route path='/educator' element={<Dashboard/>}/>
+        <Route path='/add-course' element={<AddCourse/>}/>
+        <Route path='/my-courses' element={<MyCourses/>}/>
+        <Route path='/student-enrolled' element={<StudentsEnrolled/>}/>
         
       </Routes>
     </div>

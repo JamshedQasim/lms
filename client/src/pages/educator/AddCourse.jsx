@@ -40,26 +40,26 @@ const AddCourse = () => {
             
             {/* Navigation Links */}
             <nav className="space-y-2">
-              <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <a href="/educator" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z" />
                 </svg>
                 Dashboard
               </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-3 text-purple-600 bg-purple-50 rounded-lg">
+              <a href="/add-course" className="flex items-center gap-3 px-4 py-3 text-purple-600 bg-purple-50 rounded-lg">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
                 Add Course
               </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <a href="/my-courses" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 My Courses
               </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <a href="/student-enrolled" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
@@ -72,7 +72,7 @@ const AddCourse = () => {
         {/* Main Content Area */}
         <div className="flex-1">
           {/* Header */}
-          <header className="bg-white border-b border-gray-200 px-8 py-4">
+          <header className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex justify-between items-center">
               <div></div> {/* Spacer */}
               <div className="relative">
@@ -102,9 +102,9 @@ const AddCourse = () => {
           </header>
 
           {/* Add Course Form */}
-          <div className="p-8">
-            <div className="max-w-4xl">
-              <h1 className="text-3xl font-bold text-gray-900 mb-8">Add Course</h1>
+          <div className="p-4 sm:p-6 lg:p-8">
+            <div className="max-w-3xl">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Add Course</h1>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Course Title */}
@@ -169,7 +169,7 @@ const AddCourse = () => {
                 </div>
 
                 {/* Course Thumbnail */}
-                <div>
+    <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Course Thumbnail
                   </label>

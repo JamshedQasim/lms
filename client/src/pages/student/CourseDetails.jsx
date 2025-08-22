@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { assets } from '../../assets/assets'
 
 const CourseDetails = () => {
-  const [expandedModules, setExpandedModules] = useState([0, 1]); // First two modules expanded by default
+  const [expandedModules, setExpandedModules] = useState([0, 1]); 
 
   const toggleModule = (index) => {
     setExpandedModules(prev => 
@@ -69,8 +69,8 @@ const CourseDetails = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           
           {/* Left Side - Course Content */}
           <div className="lg:col-span-2">

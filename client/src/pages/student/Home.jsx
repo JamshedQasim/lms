@@ -1,15 +1,17 @@
 import React from 'react'
 import { assets } from '../../assets/assets'
+import Navbar from '../../components/student/Navbar'
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-white">
+      <Navbar />
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
         {/* Hero Section */}
         <div className="text-center">
           {/* Main Headline */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Empower your future with the courses designed to{' '}
             <span className="text-blue-600 relative">
               fit your choice.
@@ -44,12 +46,12 @@ const Home = () => {
           </div>
           
           {/* Sub-text */}
-          <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
             We bring together world-class instructors, interactive content, and a supportive community to help you achieve your personal and professional goals.
           </p>
           
           {/* Search Bar */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto mb-20">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-xl mx-auto mb-16">
             <div className="relative flex-1 w-full sm:w-auto">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,9 +71,9 @@ const Home = () => {
         </div>
 
         {/* Trusted by learners section */}
-        <div className="text-center mb-20">
-          <p className="text-gray-600 mb-8">Trusted by learners from</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+        <div className="text-center mb-16">
+          <p className="text-gray-600 mb-6">Trusted by learners from</p>
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
             <img src={assets.microsoft_logo} alt="Microsoft" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
             <img src={assets.walmart_logo} alt="Walmart" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
             <img src={assets.accenture_logo} alt="Accenture" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
@@ -81,16 +83,16 @@ const Home = () => {
         </div>
 
         {/* Learn from the best section */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Learn from the best</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+        <div className="mb-16">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Learn from the best</h2>
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Discover our top-rated courses across various categories. From coding and design to business and wellness, our courses are crafted to deliver results.
             </p>
           </div>
           
           {/* Course Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
             {/* Course Card 1 */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="bg-green-100 h-32 flex items-center justify-center">
