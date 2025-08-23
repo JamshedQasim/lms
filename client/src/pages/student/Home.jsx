@@ -1,11 +1,9 @@
 import React from 'react'
 import { assets } from '../../assets/assets'
-import Navbar from '../../components/student/Navbar'
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
       {/* Main Content */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
         {/* Hero Section */}

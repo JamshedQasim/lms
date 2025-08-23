@@ -17,6 +17,7 @@ import CreateAccount from "./pages/student/CreateAccount";
 const App = () => {
   return (
     <div className='text-default min-h-screen bg-white'>
+      <Navbar />
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path='/Course-list' element={<CoursesList/>}/>
