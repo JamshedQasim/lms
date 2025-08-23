@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-	_id: { type: String, required: true },
+	_id: { type: String },
 	name: { type: String },
 	email: { type: String, required: true, unique: true },
 	imageUrl: { type: String },
-	// Password is managed by Clerk; not stored locally
+	// Password is managed by Clerk; for local auth it's stored hashed
 	password: { type: String, select: false },
 
 	enrolledCourses: [

@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './configs/mongodb.js';
 import { clerkWebhook } from './controllers/webhooks.js';
+import authRouter from './routes/auth.js';
 
 //initializing express
 const app = express();
@@ -18,6 +19,9 @@ app.post('/webhook', express.raw({ type: 'application/json' }), clerkWebhook);
 
 // general middleware for other JSON routes (add below webhook raw parser)
 app.use(express.json());
+
+// auth routes
+app.use('/api/auth', authRouter);
 
 //routes
 app.get('/', (req, res) => {
