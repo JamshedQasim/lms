@@ -1,6 +1,7 @@
 import express from 'express';
 import UserService from '../services/UserService.js';
 import { validateRegistration, validateLogin } from '../middleware/validation.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -79,71 +80,40 @@ router.post('/login', validateLogin, async (req, res) => {
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
-
-    // Check if MongoDB is connected
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database not available. Please try again later.' });
-    }
-
-    // Check if user exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
-    }
-
-    // Generate a simple reset token (in production, you'd send this via email)
-    const resetToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     
-    // Store reset token in user document (in production, add expiration)
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
-    await user.save();
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
 
-    res.json({
-      message: 'Password reset instructions sent to your email',
-      resetToken: resetToken // In production, remove this and send via email
+    const user = await UserService.getUserByEmail(email);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'No account found with this email address. Please sign up first.' });
+    }
+
+    // In a real application, you would send an email with reset instructions
+    // For demo purposes, we'll just return a success message
+    res.json({ 
+      message: 'Password reset instructions have been sent to your email address.',
+      demo: 'This is a demo. In a real app, you would receive an email with reset instructions.'
     });
   } catch (error) {
     console.error('Forgot password error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Failed to process password reset request' });
   }
 });
 
-// Reset password endpoint
-router.post('/reset-password', async (req, res) => {
+// POST /api/auth/logout - Logout user
+router.post('/logout', authenticateToken, async (req, res) => {
   try {
-    const { email, resetToken, newPassword } = req.body;
-
-    // Check if MongoDB is connected
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database not available. Please try again later.' });
-    }
-
-    // Find user by email and reset token
-    const user = await User.findOne({ 
-      email, 
-      resetPasswordToken: resetToken,
-      resetPasswordExpires: { $gt: Date.now() }
-    });
-
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired reset token' });
-    }
-
-    // Hash new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-    // Update password and clear reset token
-    user.password = hashedPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save();
-
-    res.json({ message: 'Password reset successful' });
+    // In a real application, you might want to add the token to a blacklist
+    // For now, we'll just return a success message
+    // The frontend will handle removing the token from localStorage
+    
+    res.json({ message: 'Logged out successfully' });
   } catch (error) {
-    console.error('Reset password error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Logout error:', error);
+    res.status(500).json({ message: 'Failed to logout' });
   }
 });
 

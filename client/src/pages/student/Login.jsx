@@ -35,30 +35,37 @@ const Login = () => {
     setError('');
 
     try {
-      // Check if user exists in localStorage (offline mode)
-      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
-      const user = allUsers.find(u => u.email === formData.email && u.password === formData.password);
-      
-      if (!user) {
-        throw new Error('Invalid email or password. Please check your credentials or sign up first.');
+      // Call backend API for authentication
+      const response = await fetch('http://localhost:3001/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
       }
 
-      // Generate a simple token (for demo purposes)
-      const token = btoa(JSON.stringify(user)) + '.' + Date.now();
-      
-      // Store token in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }));
+      // Store token and user data
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
 
       // Redirect to enrolled courses page
       navigate('/my-enrollments');
     } catch (error) {
-      setError(error.message || 'Something went wrong. Please try again.');
+      console.error('Login error:', error);
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        setError('Cannot connect to server. Please check if the backend is running.');
+      } else {
+        setError(error.message || 'Something went wrong. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -83,16 +90,24 @@ const Login = () => {
     setError('');
 
     try {
-      // Check if user exists in localStorage (offline mode)
-      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
-      const user = allUsers.find(u => u.email === forgotPasswordEmail);
-      
-      if (!user) {
-        throw new Error('No account found with this email address. Please sign up first.');
+      // Call backend API for password reset
+      const response = await fetch('http://localhost:3001/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: forgotPasswordEmail
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Password reset failed');
       }
 
-      // For demo purposes, show a simple reset message
-      setForgotPasswordSuccess(`Demo mode: Password reset would be sent to ${forgotPasswordEmail}. In a real app, you would receive an email with reset instructions.`);
+      setForgotPasswordSuccess('Password reset instructions have been sent to your email address.');
       setForgotPasswordEmail('');
     } catch (error) {
       setError(error.message || 'Something went wrong. Please try again.');

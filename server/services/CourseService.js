@@ -101,6 +101,19 @@ class CourseService {
     }
   }
 
+  // Get courses by instructor ID
+  async getInstructorCourses(instructorId) {
+    try {
+      const courses = await Course.find({ instructorId })
+        .populate('instructorId', 'name email imageUrl')
+        .sort({ createdAt: -1 });
+
+      return courses;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Get course modules
   async getCourseModules(courseId) {
     try {

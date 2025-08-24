@@ -58,37 +58,29 @@ const Signup = () => {
     setError('');
 
     try {
-      // Create user account locally (offline mode)
-      const newUser = {
-        id: Date.now().toString(), // Simple ID generation
-        name: formData.name,
-        email: formData.email,
-        role: formData.role || 'student',
-        createdAt: new Date().toISOString()
-      };
-
-      // Generate a simple token (for demo purposes)
-      const token = btoa(JSON.stringify(newUser)) + '.' + Date.now();
-      
-      // Store user data and token in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(newUser));
-      
-      // Store all users in localStorage for login purposes
-      const existingUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
-      const userExists = existingUsers.find(user => user.email === formData.email);
-      
-      if (userExists) {
-        setError('User with this email already exists. Please login instead.');
-        return;
-      }
-      
-      // Add new user to the list
-      existingUsers.push({
-        ...newUser,
-        password: formData.password // Store password for login verification
+      // Call backend API to create user account
+      const response = await fetch('http://localhost:3001/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role || 'student'
+        })
       });
-      localStorage.setItem('allUsers', JSON.stringify(existingUsers));
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed');
+      }
+
+      // Store token and user data
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       
       // Show success message
       alert('Account created successfully! You are now logged in.');
@@ -96,8 +88,12 @@ const Signup = () => {
       // Redirect to my enrollments
       navigate('/my-enrollments');
     } catch (error) {
-      setError('Signup failed. Please try again.');
       console.error('Signup error:', error);
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        setError('Cannot connect to server. Please check if the backend is running.');
+      } else {
+        setError(error.message || 'Signup failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

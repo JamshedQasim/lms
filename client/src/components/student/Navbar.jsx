@@ -16,11 +16,29 @@ const Navbar = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        // Call backend logout API
+        await fetch('http://localhost:3001/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Continue with logout even if API call fails
+    } finally {
+      // Always clear local storage and redirect
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+      navigate('/');
+    }
   };
 
   return (
@@ -48,15 +66,29 @@ const Navbar = () => {
             
             {user ? (
               <>
-                <Link to='/browse-courses' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
-                  Browse Courses
-                </Link>
-                <Link to='/my-enrollments' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
-                  My Courses
-                </Link>
+                {user.role === 'instructor' ? (
+                  <>
+                    <Link to='/instructor/dashboard' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
+                      🎓 Dashboard
+                    </Link>
+                    <Link to='/instructor/create-course' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
+                      ➕ Create Course
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to='/browse-courses' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
+                      Browse Courses
+                    </Link>
+                    <Link to='/my-enrollments' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
+                      My Courses
+                    </Link>
+                  </>
+                )}
                 <div className="flex items-center gap-3">
                   <span className="text-sm text-gray-700">
                     Welcome, <span className="font-medium text-blue-600">{user.name}</span>!
+                    {user.role === 'instructor' && <span className="ml-1 text-xs text-purple-600">(Instructor)</span>}
                   </span>
                   <button
                     onClick={handleLogout}

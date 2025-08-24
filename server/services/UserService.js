@@ -58,6 +58,16 @@ class UserService {
     }
   }
 
+  // Get user by email
+  async getUserByEmail(email) {
+    try {
+      const user = await User.findOne({ email }).select('-password');
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Generate JWT token
   generateToken(userId) {
     return jwt.sign(

@@ -43,6 +43,17 @@ router.get('/enrolled', async (req, res) => {
   }
 });
 
+// GET /api/v1/courses/instructor - Get all courses for current instructor
+router.get('/instructor', authorizeRole(['instructor', 'admin']), async (req, res) => {
+  try {
+    const instructorCourses = await CourseService.getInstructorCourses(req.user.userId);
+    res.json({ courses: instructorCourses });
+  } catch (error) {
+    console.error('Get instructor courses error:', error);
+    res.status(500).json({ message: 'Failed to fetch instructor courses' });
+  }
+});
+
 // GET /api/v1/courses/:slug - Get course by slug
 router.get('/:slug', async (req, res) => {
   try {

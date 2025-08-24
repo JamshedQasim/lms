@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/student/Navbar';
 
 const CourseBrowser = () => {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
@@ -16,57 +18,53 @@ const CourseBrowser = () => {
 
   useEffect(() => {
     fetchCourses();
+    loadEnrolledCourses();
   }, [filters]);
+
+  const loadEnrolledCourses = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setEnrolledCourses([]);
+        return;
+      }
+
+      // Call backend API to get enrolled courses
+      const response = await fetch('http://localhost:3001/api/v1/courses/enrolled', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const enrolledIds = data.courses.map(course => course._id);
+        setEnrolledCourses(enrolledIds);
+      } else {
+        setEnrolledCourses([]);
+      }
+    } catch (error) {
+      console.error('Error loading enrolled courses:', error);
+      setEnrolledCourses([]);
+    }
+  };
 
   const fetchCourses = async () => {
     try {
       setLoading(true);
       
-      // Use local mock data for now (no backend required)
-      const mockCourses = [
-        {
-          _id: '1',
-          title: 'Complete Web Development Bootcamp',
-          description: 'Learn web development from scratch with HTML, CSS, JavaScript, React, Node.js, and MongoDB. Build real-world projects and become a full-stack developer.',
-          category: 'Web Development',
-          level: 'Beginner',
-          price: 89.99,
-          originalPrice: 199.99,
-          thumbnailUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400',
-          totalDuration: 1200,
-          enrolledStudents: 1250,
-          rating: 4.8
-        },
-        {
-          _id: '2',
-          title: 'Advanced JavaScript: From ES6+ to Expert',
-          description: 'Master modern JavaScript with ES6+ features, async programming, design patterns, and advanced concepts. Perfect for developers wanting to level up their JS skills.',
-          category: 'Programming',
-          level: 'Advanced',
-          price: 69.99,
-          originalPrice: 149.99,
-          thumbnailUrl: 'https://images.unsplash.com/photo-1555066931-4365d11b3a35?w=400',
-          totalDuration: 900,
-          enrolledStudents: 680,
-          rating: 4.9
-        },
-        {
-          _id: '3',
-          title: 'Data Science Fundamentals with Python',
-          description: 'Learn data science from the ground up using Python. Cover statistics, machine learning, data visualization, and real-world data analysis projects.',
-          category: 'Data Science',
-          level: 'Intermediate',
-          price: 79.99,
-          originalPrice: 179.99,
-          thumbnailUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400',
-          totalDuration: 1500,
-          enrolledStudents: 920,
-          rating: 4.7
-        }
-      ];
-
-      // Apply filters to mock data
-      let filteredCourses = mockCourses;
+      // Call backend API to fetch courses
+      const response = await fetch('http://localhost:3001/api/v1/courses');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch courses');
+      }
+      
+      const data = await response.json();
+      const apiCourses = data.courses || [];
+      
+      // Apply filters to API data
+      let filteredCourses = apiCourses;
       
       if (filters.search) {
         filteredCourses = filteredCourses.filter(course => 
@@ -102,7 +100,7 @@ const CourseBrowser = () => {
       setCourses(filteredCourses);
     } catch (error) {
       console.error('Error fetching courses:', error);
-      setError('Error loading courses');
+      setError('Error loading courses. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -117,15 +115,31 @@ const CourseBrowser = () => {
 
   const handleEnroll = async (courseId) => {
     try {
-      // Store enrollment in localStorage
-      const enrolledCourses = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
-      if (!enrolledCourses.includes(courseId)) {
-        enrolledCourses.push(courseId);
-        localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
-        alert('Successfully enrolled in course!');
-      } else {
-        alert('You are already enrolled in this course!');
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please login to enroll in courses');
+        navigate('/login');
+        return;
       }
+
+      // Call backend API to enroll in course
+      const response = await fetch(`http://localhost:3001/api/v1/courses/${courseId}/enroll`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Enrollment failed');
+      }
+
+      // Update local state
+      const enrolled = [...enrolledCourses, courseId];
+      setEnrolledCourses(enrolled);
+      alert('Successfully enrolled in course!');
     } catch (error) {
       alert('Error enrolling in course: ' + error.message);
     }
@@ -321,12 +335,21 @@ const CourseBrowser = () => {
                         </span>
                       )}
                     </div>
-                    <button
-                      onClick={() => handleEnroll(course._id)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      Enroll Now
-                    </button>
+                                         {enrolledCourses.includes(course._id) ? (
+                       <Link
+                         to={`/learn/${course._id}`}
+                         className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                       >
+                         Start Learning
+                       </Link>
+                     ) : (
+                       <button
+                         onClick={() => handleEnroll(course._id)}
+                         className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                       >
+                         Enroll Now
+                       </button>
+                     )}
                   </div>
                 </div>
               </div>
