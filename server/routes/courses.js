@@ -32,6 +32,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/v1/courses/enrolled - Get all enrolled courses for current user
+router.get('/enrolled', async (req, res) => {
+  try {
+    const enrolledCourses = await EnrollmentService.getUserEnrollments(req.user.userId);
+    res.json({ courses: enrolledCourses });
+  } catch (error) {
+    console.error('Get enrolled courses error:', error);
+    res.status(500).json({ message: 'Failed to fetch enrolled courses' });
+  }
+});
+
 // GET /api/v1/courses/:slug - Get course by slug
 router.get('/:slug', async (req, res) => {
   try {

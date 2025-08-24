@@ -9,7 +9,6 @@ dotenv.config();
 
 const sampleCourses = [
   {
-    _id: new mongoose.Types.ObjectId().toString(),
     title: 'Complete Web Development Bootcamp',
     slug: 'complete-web-development-bootcamp',
     description: 'Learn web development from scratch with HTML, CSS, JavaScript, React, Node.js, and MongoDB. Build real-world projects and become a full-stack developer.',
@@ -40,7 +39,6 @@ const sampleCourses = [
     lifetimeAccess: true
   },
   {
-    _id: new mongoose.Types.ObjectId().toString(),
     title: 'Advanced JavaScript: From ES6+ to Expert',
     slug: 'advanced-javascript-es6-expert',
     description: 'Master modern JavaScript with ES6+ features, async programming, design patterns, and advanced concepts. Perfect for developers wanting to level up their JS skills.',
@@ -71,7 +69,6 @@ const sampleCourses = [
     lifetimeAccess: true
   },
   {
-    _id: new mongoose.Types.ObjectId().toString(),
     title: 'Data Science Fundamentals with Python',
     slug: 'data-science-fundamentals-python',
     description: 'Learn data science from the ground up using Python. Cover statistics, machine learning, data visualization, and real-world data analysis projects.',
@@ -115,7 +112,6 @@ const seedCourses = async () => {
     let instructor = await User.findOne({ role: 'instructor' });
     if (!instructor) {
       instructor = new User({
-        _id: new mongoose.Types.ObjectId().toString(),
         name: 'John Doe',
         email: 'instructor@example.com',
         password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

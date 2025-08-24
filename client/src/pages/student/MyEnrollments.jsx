@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from '../../components/student/Navbar'
 
 const MyEnrollments = () => {
   const [user, setUser] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     // Get user data from localStorage
@@ -11,13 +14,42 @@ const MyEnrollments = () => {
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setUser(parsedUser);
-      
-      // Get enrolled courses from user data
-      if (parsedUser.enrolledCourses) {
-        setEnrolledCourses(parsedUser.enrolledCourses);
-      }
+      fetchEnrolledCourses();
+    } else {
+      setLoading(false);
     }
   }, []);
+
+  const fetchEnrolledCourses = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError('Please login to view your courses');
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:3001/api/v1/courses/enrolled', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch enrolled courses');
+      }
+
+      const data = await response.json();
+      setEnrolledCourses(data.courses || []);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -36,7 +68,7 @@ const MyEnrollments = () => {
             </div>
             <div className="flex gap-3">
               <Link 
-                to="/course-list" 
+                to="/browse-courses" 
                 className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,14 +93,28 @@ const MyEnrollments = () => {
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">My Enrolled Courses</h2>
           
-          {enrolledCourses && enrolledCourses.length > 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <div className="text-red-600 mb-4">{error}</div>
+              <button 
+                onClick={fetchEnrolledCourses}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                Try Again
+              </button>
+            </div>
+          ) : enrolledCourses && enrolledCourses.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {enrolledCourses.map((course, index) => (
-                <div key={course.id || index} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                <div key={course._id || index} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
                   {/* Course Image */}
                   <div className="relative">
                     <img 
-                      src={course.image || "https://via.placeholder.com/300x200/3B82F6/FFFFFF?text=Course"} 
+                      src={course.thumbnailUrl || "https://via.placeholder.com/300x200/3B82F6/FFFFFF?text=Course"} 
                       alt={course.title}
                       className="w-full h-40 object-cover"
                     />
@@ -90,16 +136,23 @@ const MyEnrollments = () => {
                     
                     {/* Course Stats */}
                     <div className="flex items-center justify-between mb-3 text-xs text-gray-500">
-                      <span>📚 {course.lessons || 'N/A'} lessons</span>
-                      <span>⏱️ {course.duration || 'N/A'}</span>
+                      <span>📚 {course.modules?.length || 0} modules</span>
+                      <span>⏱️ {Math.floor((course.totalDuration || 0) / 60)}h {(course.totalDuration || 0) % 60}m</span>
                     </div>
 
-                    {/* Instructor */}
-                    {course.instructor && (
-                      <p className="text-xs text-gray-700 mb-3">
-                        <span className="font-medium">By</span> {course.instructor}
-                      </p>
-                    )}
+                    {/* Category and Level */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {course.category}
+                      </span>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        course.level === 'Beginner' ? 'bg-green-100 text-green-800' :
+                        course.level === 'Intermediate' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {course.level}
+                      </span>
+                    </div>
 
                     {/* Progress and Actions */}
                     <div className="flex items-center justify-between">
@@ -129,7 +182,7 @@ const MyEnrollments = () => {
                 Start your learning journey by enrolling in courses
               </p>
               <Link 
-                to="/course-list" 
+                to="/browse-courses" 
                 className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Browse Courses
