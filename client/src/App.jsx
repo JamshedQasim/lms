@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom"
 import Home from "./pages/student/Home"
 import CoursesList from "./pages/student/CoursesList";
+import CourseBrowser from "./pages/student/CourseBrowser";
 import CourseDetails from "./pages/student/CourseDetails";
 import MyEnrollments from "./pages/student/MyEnrollments";
 import Player from "./pages/student/Player";
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/' element={<Home />}/>
         <Route path='/Course-list' element={<CoursesList/>}/>
         <Route path='/Course-list/:input' element={<CoursesList/>}/>
+        <Route path='/browse-courses' element={<CourseBrowser/>}/>
         <Route path='/course/:id' element={<CourseDetails/>}/>
         <Route path='/my-enrollments' element={<MyEnrollments/>}/>
         <Route path='/player/:courseId' element={<Player/>}/>

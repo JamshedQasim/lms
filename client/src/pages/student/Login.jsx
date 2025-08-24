@@ -10,6 +10,10 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+  const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
+  const [forgotPasswordSuccess, setForgotPasswordSuccess] = useState('');
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -61,6 +65,57 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    setShowForgotPassword(true);
+    setForgotPasswordEmail(formData.email);
+    setError('');
+    setForgotPasswordSuccess('');
+  };
+
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!forgotPasswordEmail.trim()) {
+      setError('Please enter your email address');
+      return;
+    }
+
+    setForgotPasswordLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:3001/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: forgotPasswordEmail
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send reset email');
+      }
+
+      setForgotPasswordSuccess(`Password reset instructions sent! Reset token: ${data.resetToken}`);
+      setForgotPasswordEmail('');
+    } catch (error) {
+      setError(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setForgotPasswordLoading(false);
+    }
+  };
+
+  const closeForgotPassword = () => {
+    setShowForgotPassword(false);
+    setForgotPasswordEmail('');
+    setError('');
+    setForgotPasswordSuccess('');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex flex-col">
       {/* Main Content */}
@@ -88,7 +143,7 @@ const Login = () => {
                <span className="text-3xl font-bold text-gray-900">CourseStudy</span>
              </div>
              <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h1>
-             <p className="text-gray-600">Sign in to your account to continue learning</p>
+             <p className="text-gray-600">Sign in to your existing account to continue learning</p>
            </div>
 
           {/* Login Form */}
@@ -163,9 +218,13 @@ const Login = () => {
                     Remember me
                   </label>
                 </div>
-                <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                <button 
+                  type="button"
+                  onClick={() => handleForgotPassword()}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                >
                   Forgot password?
-                </Link>
+                </button>
               </div>
 
               {/* Login Button */}
@@ -174,7 +233,7 @@ const Login = () => {
                 disabled={loading}
                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Signing in...' : 'Sign in'}
+                {loading ? 'Signing in...' : 'Sign In'}
               </button>
 
               {/* Divider */}
@@ -223,6 +282,71 @@ const Login = () => {
               </Link>
             </p>
           </div>
+
+          {/* Forgot Password Modal */}
+          {showForgotPassword && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Forgot Password</h3>
+                  <button
+                    onClick={closeForgotPassword}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {error && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-red-600 text-sm">{error}</p>
+                  </div>
+                )}
+
+                {forgotPasswordSuccess && (
+                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-green-600 text-sm">{forgotPasswordSuccess}</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-2">
+                      Email address
+                    </label>
+                    <input
+                      type="email"
+                      id="forgot-email"
+                      value={forgotPasswordEmail}
+                      onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    />
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={closeForgotPassword}
+                      className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={forgotPasswordLoading}
+                      className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {forgotPasswordLoading ? 'Sending...' : 'Send Reset Email'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       

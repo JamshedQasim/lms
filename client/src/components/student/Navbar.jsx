@@ -48,7 +48,7 @@ const Navbar = () => {
             
             {user ? (
               <>
-                <Link to='/course-list' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
+                <Link to='/browse-courses' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">
                   Browse Courses
                 </Link>
                 <Link to='/my-enrollments' className="hidden sm:block hover:text-gray-900 transition-colors font-medium text-sm">

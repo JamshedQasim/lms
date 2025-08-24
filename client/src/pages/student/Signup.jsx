@@ -7,7 +7,8 @@ const Signup = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'student'
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -66,6 +67,7 @@ const Signup = () => {
           name: formData.name,
           email: formData.email,
           password: formData.password,
+          role: formData.role,
           imageUrl: 'https://via.placeholder.com/150'
         }),
       });
@@ -227,6 +229,28 @@ const Signup = () => {
                     )}
                   </button>
                 </div>
+              </div>
+
+              {/* Role Selection */}
+              <div>
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+                  I want to join as
+                </label>
+                <select
+                  id="role"
+                  value={formData.role}
+                  onChange={(e) => handleInputChange('role', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                >
+                  <option value="student">Student - Learn and grow</option>
+                  <option value="instructor">Instructor - Teach and share knowledge</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  {formData.role === 'student' 
+                    ? 'Access courses, track progress, and earn certificates' 
+                    : 'Create courses, manage content, and help students learn'
+                  }
+                </p>
               </div>
 
               {/* Terms and Conditions */}
