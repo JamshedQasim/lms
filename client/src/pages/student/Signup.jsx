@@ -58,34 +58,46 @@ const Signup = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role,
-          imageUrl: 'https://via.placeholder.com/150'
-        }),
-      });
+      // Create user account locally (offline mode)
+      const newUser = {
+        id: Date.now().toString(), // Simple ID generation
+        name: formData.name,
+        email: formData.email,
+        role: formData.role || 'student',
+        createdAt: new Date().toISOString()
+      };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Signup failed');
+      // Generate a simple token (for demo purposes)
+      const token = btoa(JSON.stringify(newUser)) + '.' + Date.now();
+      
+      // Store user data and token in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(newUser));
+      
+      // Store all users in localStorage for login purposes
+      const existingUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const userExists = existingUsers.find(user => user.email === formData.email);
+      
+      if (userExists) {
+        setError('User with this email already exists. Please login instead.');
+        return;
       }
-
-      // Store token in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Redirect to enrolled courses page
+      
+      // Add new user to the list
+      existingUsers.push({
+        ...newUser,
+        password: formData.password // Store password for login verification
+      });
+      localStorage.setItem('allUsers', JSON.stringify(existingUsers));
+      
+      // Show success message
+      alert('Account created successfully! You are now logged in.');
+      
+      // Redirect to my enrollments
       navigate('/my-enrollments');
     } catch (error) {
-      setError(error.message || 'Something went wrong. Please try again.');
+      setError('Signup failed. Please try again.');
+      console.error('Signup error:', error);
     } finally {
       setLoading(false);
     }

@@ -12,13 +12,13 @@ const courseSchema = new mongoose.Schema({
   originalPrice: { type: Number },
   discount: { type: Number, default: 0 },
   thumbnailUrl: { type: String, required: true },
-  instructorId: { type: String, ref: 'User', required: true },
+  instructorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   status: { 
     type: String, 
     enum: ['draft', 'published', 'archived'], 
     default: 'draft' 
   },
-  modules: [{ type: String, ref: 'Module' }],
+  modules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Module' }],
   totalDuration: { type: Number, default: 0 }, // in minutes
   enrolledStudents: { type: Number, default: 0 },
   rating: { type: Number, default: 0 },

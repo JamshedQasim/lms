@@ -23,29 +23,34 @@ const MyEnrollments = () => {
   const fetchEnrolledCourses = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
       
-      if (!token) {
-        setError('Please login to view your courses');
+      // Get enrolled courses from localStorage (offline mode)
+      const enrolledCourseIds = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+      
+      if (enrolledCourseIds.length === 0) {
+        setEnrolledCourses([]);
         setLoading(false);
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/v1/courses/enrolled', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      // Mock enrolled courses data
+      const mockEnrolledCourses = [
+        {
+          _id: '1',
+          title: 'Complete Web Development Bootcamp',
+          description: 'Learn web development from scratch with HTML, CSS, JavaScript, React, Node.js, and MongoDB.',
+          category: 'Web Development',
+          level: 'Beginner',
+          thumbnailUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400',
+          totalDuration: 1200,
+          modules: 12
         }
-      });
+      ].filter(course => enrolledCourseIds.includes(course._id));
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch enrolled courses');
-      }
-
-      const data = await response.json();
-      setEnrolledCourses(data.courses || []);
+      setEnrolledCourses(mockEnrolledCourses);
     } catch (error) {
-      setError(error.message);
+      console.error('Error fetching enrolled courses:', error);
+      setEnrolledCourses([]);
     } finally {
       setLoading(false);
     }

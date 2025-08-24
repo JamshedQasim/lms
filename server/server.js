@@ -17,6 +17,33 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/courses', courseRoutes);
 
+// Test endpoint - no authentication required
+app.get('/test', (req, res) => {
+  res.json({ message: 'Server is working!', timestamp: new Date().toISOString() });
+});
+
+// Test courses endpoint - no authentication required
+app.get('/test-courses', async (req, res) => {
+  try {
+    const Course = (await import('./models/Course.js')).default;
+    const courses = await Course.find({ status: 'published' }).limit(3);
+    res.json({ 
+      message: 'Courses fetched successfully', 
+      count: courses.length,
+      courses: courses.map(c => ({
+        id: c._id,
+        title: c.title,
+        category: c.category,
+        level: c.level,
+        price: c.price
+      }))
+    });
+  } catch (error) {
+    console.error('Test courses error:', error);
+    res.status(500).json({ message: 'Error fetching courses', error: error.message });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('API Working!');
 });
@@ -30,10 +57,10 @@ const startServer = async () => {
     console.log('Starting server...');
     
     // Start the server immediately
-    const server = app.listen(PORT, '0.0.0.0', () => {
+    const server = app.listen(PORT, 'localhost', () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`API available at http://localhost:${PORT}`);
-      console.log(`Server bound to all network interfaces`);
+      console.log(`Server bound to localhost only`);
     });
     
     // Add error handling for the server
@@ -62,3 +89,14 @@ const startServer = async () => {
 
 // Start the server
 startServer();
+
+// Keep the process alive
+process.on('SIGINT', () => {
+  console.log('Received SIGINT. Gracefully shutting down...');
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log('Received SIGTERM. Gracefully shutting down...');
+  process.exit(0);
+});

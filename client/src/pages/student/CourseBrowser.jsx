@@ -21,36 +21,88 @@ const CourseBrowser = () => {
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
       
-      if (!token) {
-        setError('Please login to browse courses');
-        setLoading(false);
-        return;
-      }
-
-      const queryParams = new URLSearchParams();
-      if (filters.search) queryParams.append('search', filters.search);
-      if (filters.category) queryParams.append('category', filters.category);
-      if (filters.level) queryParams.append('level', filters.level);
-      if (filters.priceMin) queryParams.append('priceMin', filters.priceMin);
-      if (filters.priceMax) queryParams.append('priceMax', filters.priceMax);
-
-      const response = await fetch(`http://localhost:3001/api/v1/courses?${queryParams}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      // Use local mock data for now (no backend required)
+      const mockCourses = [
+        {
+          _id: '1',
+          title: 'Complete Web Development Bootcamp',
+          description: 'Learn web development from scratch with HTML, CSS, JavaScript, React, Node.js, and MongoDB. Build real-world projects and become a full-stack developer.',
+          category: 'Web Development',
+          level: 'Beginner',
+          price: 89.99,
+          originalPrice: 199.99,
+          thumbnailUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400',
+          totalDuration: 1200,
+          enrolledStudents: 1250,
+          rating: 4.8
+        },
+        {
+          _id: '2',
+          title: 'Advanced JavaScript: From ES6+ to Expert',
+          description: 'Master modern JavaScript with ES6+ features, async programming, design patterns, and advanced concepts. Perfect for developers wanting to level up their JS skills.',
+          category: 'Programming',
+          level: 'Advanced',
+          price: 69.99,
+          originalPrice: 149.99,
+          thumbnailUrl: 'https://images.unsplash.com/photo-1555066931-4365d11b3a35?w=400',
+          totalDuration: 900,
+          enrolledStudents: 680,
+          rating: 4.9
+        },
+        {
+          _id: '3',
+          title: 'Data Science Fundamentals with Python',
+          description: 'Learn data science from the ground up using Python. Cover statistics, machine learning, data visualization, and real-world data analysis projects.',
+          category: 'Data Science',
+          level: 'Intermediate',
+          price: 79.99,
+          originalPrice: 179.99,
+          thumbnailUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400',
+          totalDuration: 1500,
+          enrolledStudents: 920,
+          rating: 4.7
         }
-      });
+      ];
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch courses');
+      // Apply filters to mock data
+      let filteredCourses = mockCourses;
+      
+      if (filters.search) {
+        filteredCourses = filteredCourses.filter(course => 
+          course.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+          course.description.toLowerCase().includes(filters.search.toLowerCase())
+        );
+      }
+      
+      if (filters.category) {
+        filteredCourses = filteredCourses.filter(course => 
+          course.category === filters.category
+        );
+      }
+      
+      if (filters.level) {
+        filteredCourses = filteredCourses.filter(course => 
+          course.level === filters.level
+        );
+      }
+      
+      if (filters.priceMin) {
+        filteredCourses = filteredCourses.filter(course => 
+          course.price >= parseFloat(filters.priceMin)
+        );
+      }
+      
+      if (filters.priceMax) {
+        filteredCourses = filteredCourses.filter(course => 
+          course.price <= parseFloat(filters.priceMax)
+        );
       }
 
-      const data = await response.json();
-      setCourses(data.courses || []);
+      setCourses(filteredCourses);
     } catch (error) {
-      setError(error.message);
+      console.error('Error fetching courses:', error);
+      setError('Error loading courses');
     } finally {
       setLoading(false);
     }
@@ -65,25 +117,17 @@ const CourseBrowser = () => {
 
   const handleEnroll = async (courseId) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3001/api/v1/courses/${courseId}/enroll`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Enrollment failed');
+      // Store enrollment in localStorage
+      const enrolledCourses = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+      if (!enrolledCourses.includes(courseId)) {
+        enrolledCourses.push(courseId);
+        localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
+        alert('Successfully enrolled in course!');
+      } else {
+        alert('You are already enrolled in this course!');
       }
-
-      // Refresh courses to update enrollment status
-      fetchCourses();
-      alert('Successfully enrolled in course!');
     } catch (error) {
-      alert(error.message);
+      alert('Error enrolling in course: ' + error.message);
     }
   };
 

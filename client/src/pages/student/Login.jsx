@@ -35,26 +35,25 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+      // Check if user exists in localStorage (offline mode)
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const user = allUsers.find(u => u.email === formData.email && u.password === formData.password);
+      
+      if (!user) {
+        throw new Error('Invalid email or password. Please check your credentials or sign up first.');
       }
 
+      // Generate a simple token (for demo purposes)
+      const token = btoa(JSON.stringify(user)) + '.' + Date.now();
+      
       // Store token in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }));
 
       // Redirect to enrolled courses page
       navigate('/my-enrollments');
@@ -84,23 +83,16 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/forgot-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: forgotPasswordEmail
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to send reset email');
+      // Check if user exists in localStorage (offline mode)
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const user = allUsers.find(u => u.email === forgotPasswordEmail);
+      
+      if (!user) {
+        throw new Error('No account found with this email address. Please sign up first.');
       }
 
-      setForgotPasswordSuccess(`Password reset instructions sent! Reset token: ${data.resetToken}`);
+      // For demo purposes, show a simple reset message
+      setForgotPasswordSuccess(`Demo mode: Password reset would be sent to ${forgotPasswordEmail}. In a real app, you would receive an email with reset instructions.`);
       setForgotPasswordEmail('');
     } catch (error) {
       setError(error.message || 'Something went wrong. Please try again.');
