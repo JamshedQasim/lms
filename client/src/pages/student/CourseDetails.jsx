@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { assets } from '../../assets/assets'
+import Navbar from '../../components/student/Navbar'
+import { Link } from 'react-router-dom'
 
 const CourseDetails = () => {
   const [expandedModules, setExpandedModules] = useState([0, 1]); 
@@ -68,12 +70,26 @@ const CourseDetails = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navbar />
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           
           {/* Left Side - Course Content */}
           <div className="lg:col-span-2">
+            {/* Back to Home Button */}
+            <div className="mb-6">
+              <Link 
+                to="/" 
+                className="inline-flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Back to Home
+              </Link>
+            </div>
+            
             {/* Course Title */}
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Build Text to image SaaS App in React JS
