@@ -55,8 +55,7 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// Indexes for performance
-userSchema.index({ email: 1 });
+// Indexes for performance (removed duplicate email index)
 userSchema.index({ role: 1 });
 userSchema.index({ 'oauth.google.id': 1 });
 userSchema.index({ 'oauth.github.id': 1 });
