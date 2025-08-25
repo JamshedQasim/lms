@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import authService from '../../services/authService.js'
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -58,42 +59,29 @@ const Signup = () => {
     setError('');
 
     try {
-      // Call backend API to create user account
-      const response = await fetch('http://localhost:3001/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role || 'student'
-        })
+      // Use authService for signup
+      const data = await authService.signup({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role || 'student'
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Signup failed');
-      }
-
-      // Store token and user data
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // Store auth data using service
+      authService.setAuthData(data.token, data.user);
       
       // Show success message
       alert('Account created successfully! You are now logged in.');
       
-      // Redirect to my enrollments
-      navigate('/my-enrollments');
-    } catch (error) {
-      console.error('Signup error:', error);
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        setError('Cannot connect to server. Please check if the backend is running.');
+      // Redirect based on role
+      if (data.user.role === 'instructor') {
+        navigate('/instructor/dashboard');
       } else {
-        setError(error.message || 'Signup failed. Please try again.');
+        navigate('/my-enrollments');
       }
+    } catch (error) {
+      setError(error.message || 'Signup failed. Please try again.');
+      console.error('Signup error:', error);
     } finally {
       setLoading(false);
     }
@@ -104,30 +92,30 @@ const Signup = () => {
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="max-w-sm sm:max-w-md w-full">
-                     {/* Logo and Header */}
-           <div className="text-center mb-8">
-             {/* Back to Home Button */}
-             <div className="text-right mb-4">
-               <Link 
-                 to="/" 
-                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
-               >
-                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                 </svg>
-                 Back to Home
-               </Link>
-             </div>
-             
-             <div className="flex items-center justify-center mb-6">
-               <svg className="w-12 h-12 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-               </svg>
-               <span className="text-3xl font-bold text-gray-900">CourseStudy</span>
-             </div>
-             <h1 className="text-2xl font-bold text-gray-900 mb-2">Create your account</h1>
-             <p className="text-gray-600">Join thousands of learners and start your journey today</p>
-           </div>
+          {/* Logo and Header */}
+          <div className="text-center mb-8">
+            {/* Back to Home Button */}
+            <div className="text-right mb-4">
+              <Link 
+                to="/" 
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Back to Home
+              </Link>
+            </div>
+            
+            <div className="flex items-center justify-center mb-6">
+              <svg className="w-12 h-12 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+              </svg>
+              <span className="text-3xl font-bold text-gray-900">CourseStudy</span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Create your account</h1>
+            <p className="text-gray-600">Join thousands of learners and start your journey today</p>
+          </div>
 
           {/* Signup Form */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">

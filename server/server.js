@@ -1,128 +1,110 @@
-import express from 'express';
-import cors from 'cors';
-import 'dotenv/config';
-import connectDB from './configs/mongodb.js';
-import authRoutes from './routes/auth.js';
-import courseRoutes from './routes/courses.js';
-import mongoose from 'mongoose'; // Added missing import for mongoose
+import express from "express";
+import cors from "cors";
+import "dotenv/config";
+import connectDB from "./configs/mongodb.js";
+import authRoutes from "./routes/auth.js";
+import courseRoutes from "./routes/courses.js";
+import mongoose from "mongoose";
 
 // Initialize express
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'], // Allow both Vite and React ports
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3000"], // frontend ports
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/v1/courses', courseRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/v1/courses", courseRoutes);
 
-// Test endpoint - no authentication required
-app.get('/test', (req, res) => {
-  res.json({ 
-    message: 'Server is working!', 
+// Test endpoint
+app.get("/test", (req, res) => {
+  res.json({
+    message: "Server is working!",
     timestamp: new Date().toISOString(),
-    status: 'success',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
 });
 
 // Health check endpoint
-app.get('/health', async (req, res) => {
-  try {
-    const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-    res.json({
-      status: 'healthy',
-      timestamp: new Date().toISOString(),
-      database: dbStatus,
-      uptime: process.uptime()
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'unhealthy',
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-});
-
-app.get('/', (req, res) => {
+app.get("/health", (req, res) => {
   res.json({
-    message: 'LMS API Server',
-    version: '1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      courses: '/api/v1/courses',
-      test: '/test',
-      health: '/health'
-    }
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    uptime: process.uptime(),
   });
 });
 
-// Port configuration
+// Root endpoint
+app.get("/", (req, res) => {
+  res.json({
+    message: "LMS API Server",
+    version: "1.0.0",
+    endpoints: {
+      auth: "/api/auth",
+      courses: "/api/v1/courses",
+      test: "/test",
+      health: "/health",
+    },
+  });
+});
+
+// Server Port
 const PORT = process.env.PORT || 3001;
 
-// Start server function
+// Start server
 const startServer = async () => {
   try {
-    console.log('🚀 Starting LMS server...');
-    
-    // Start the server immediately
-    const server = app.listen(PORT, 'localhost', () => {
-      console.log(`✅ Server running on port ${PORT}`);
-      console.log(`🌐 API available at http://localhost:${PORT}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+    console.log("🚀 Starting LMS server...");
+
+    // Start Express server
+    const server = app.listen(PORT, () => {
+      console.log(`✅ Server running on http://localhost:${PORT}`);
     });
-    
-    // Add error handling for the server
-    server.on('error', (error) => {
-      console.error('❌ Server error:', error);
-      if (error.code === 'EADDRINUSE') {
-        console.log(`💡 Port ${PORT} is already in use. Try a different port or kill the existing process.`);
-      }
+
+    server.on("error", (error) => {
+      console.error("❌ Server error:", error.message);
     });
-    
-    server.on('listening', () => {
-      console.log(' Server is now listening for connections');
-    });
-    
-    // Try to connect to MongoDB
-    console.log(' Attempting to connect to MongoDB...');
+
+    // Connect to MongoDB
+    console.log("🔄 Connecting to MongoDB...");
     const dbConnected = await connectDB();
-    
+
     if (dbConnected) {
-      console.log('Server started successfully with database connection!');
+      console.log("✅ Server started with database connection");
     } else {
-      console.log(' Server started but database connection failed');
-      console.log(' Some features may not work without database connection');
+      console.log("⚠️ Server started but database connection failed");
     }
-    
   } catch (error) {
-    console.error(' Failed to start server:', error);
+    console.error("❌ Failed to start server:", error.message);
     process.exit(1);
   }
 };
 
-// Start the server
 startServer();
 
 // Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('Received SIGINT. Gracefully shutting down...');
+process.on("SIGINT", () => {
+  console.log("🛑 SIGINT received. Closing...");
   mongoose.connection.close(() => {
-    console.log(' MongoDB connection closed');
+    console.log("✅ MongoDB connection closed");
     process.exit(0);
   });
 });
 
-process.on('SIGTERM', () => {
-  console.log('Received SIGTERM. Gracefully shutting down...');
+process.on("SIGTERM", () => {
+  console.log("🛑 SIGTERM received. Closing...");
   mongoose.connection.close(() => {
-    console.log(' MongoDB connection closed');
+    console.log("✅ MongoDB connection closed");
     process.exit(0);
   });
 });

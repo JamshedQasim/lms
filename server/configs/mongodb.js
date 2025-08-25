@@ -1,37 +1,33 @@
 import mongoose from "mongoose";
 
-// Connect to MongoDB
 const connectDB = async () => {
   try {
     // Use 127.0.0.1 instead of localhost for Windows compatibility
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017';
-    
-    // Set mongoose options for better compatibility (removed outdated options)
+    const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
+
     const options = {
-      dbName: 'lms',
+      dbName: "lms",
       serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000
+      socketTimeoutMS: 45000,
     };
 
     mongoose.connection.on("connected", () => {
-      console.log("MongoDB connection successful");
+      console.log("✅ MongoDB connected successfully");
     });
 
     mongoose.connection.on("error", (err) => {
-      console.error(" MongoDB connection error:", err);
+      console.error("❌ MongoDB connection error:", err.message);
     });
 
     mongoose.connection.on("disconnected", () => {
-      console.log(" MongoDB disconnected");
+      console.log("⚠️ MongoDB disconnected");
     });
 
     await mongoose.connect(mongoURI, options);
-    console.log(" Connected to MongoDB successfully");
     return true;
   } catch (error) {
-    console.error(" MongoDB connection failed:", error);
-    console.log(" Please make sure MongoDB is running on your system");
-    console.log(" On Windows, try: net start MongoDB");
+    console.error("❌ MongoDB connection failed:", error.message);
+    console.log("➡️ Please make sure MongoDB is running");
     return false;
   }
 };
