@@ -8,6 +8,7 @@ import MyEnrollments from "./pages/student/MyEnrollments";
 import Player from "./pages/student/Player";
 import Loading from "./components/student/Loading";
 import CourseLearning from "./pages/student/CourseLearning";
+import UserProfile from "./pages/student/UserProfile";
 
 import Dashboard from "./pages/educator/Dashboard";
 import AddCourse from "./pages/educator/AddCourse";
@@ -19,6 +20,7 @@ import CourseEditor from "./pages/instructor/CourseEditor";
 import Navbar from "./components/student/Navbar";
 import Login from "./pages/student/Login";
 import Signup from "./pages/student/Signup";
+
 const App = () => {
   return (
     <div className='text-default min-h-screen bg-white'>
@@ -34,6 +36,7 @@ const App = () => {
         <Route path='loading/:path' element={<Loading/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
+        <Route path='/profile' element={<UserProfile/>}/>
         <Route path='/educator' element={<Dashboard/>}/>
         <Route path='/add-course' element={<AddCourse/>}/>
         <Route path='/my-courses' element={<MyCourses/>}/>
@@ -48,4 +51,5 @@ const App = () => {
     </div>
   );
 }
+
 export default App;
