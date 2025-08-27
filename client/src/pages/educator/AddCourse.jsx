@@ -53,12 +53,12 @@ const AddCourse = () => {
         <div className="w-64 bg-white border-r border-blue-100">
           <div className="p-6">
             {/* Logo */}
-            <div className="flex items-center mb-8">
+            <Link to="/" className="flex items-center mb-8 hover:opacity-80 transition-opacity">
               <svg className="w-8 h-8 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
               </svg>
               <span className="text-2xl font-bold text-gray-900">CourseStudy</span>
-            </div>
+            </Link>
             
             {/* Navigation Links */}
             <nav className="space-y-2">
@@ -467,12 +467,12 @@ const AddCourse = () => {
       <footer className="bg-white border-t border-gray-200 py-6 px-8 mt-16">
         <div className="flex items-center justify-between">
           {/* Left - Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
             <svg className="w-6 h-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
             </svg>
             <span className="text-lg font-bold text-gray-900">CourseStudy</span>
-          </div>
+          </Link>
           
           {/* Center - Copyright */}
           <div className="text-gray-600 text-sm">

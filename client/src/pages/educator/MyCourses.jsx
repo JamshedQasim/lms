@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { assets } from '../../assets/assets'
+import { Link } from 'react-router-dom'
 
 const MyCourses = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -50,12 +50,12 @@ const MyCourses = () => {
         <div className="w-64 bg-white border-r border-blue-100">
           <div className="p-6">
             {/* Logo */}
-            <div className="flex items-center mb-8">
+            <Link to="/" className="flex items-center mb-8 hover:opacity-80 transition-opacity">
               <svg className="w-8 h-8 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
               </svg>
               <span className="text-2xl font-bold text-gray-900">CourseStudy</span>
-            </div>
+            </Link>
             
             {/* Navigation Links */}
             <nav className="space-y-2">
@@ -123,6 +123,19 @@ const MyCourses = () => {
           {/* Main Content */}
           <div className="p-4 sm:p-6 lg:p-8">
             <div className="max-w-5xl">
+              {/* Back Navigation */}
+              <div className="mb-6">
+                <Link 
+                  to="/educator" 
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  Back to Dashboard
+                </Link>
+              </div>
+              
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">My Courses</h1>
               
               {/* Courses Grid */}
@@ -179,12 +192,12 @@ const MyCourses = () => {
       <footer className="bg-white border-t border-gray-200 py-6 px-8 mt-auto">
         <div className="flex items-center justify-between">
           {/* Left - Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
             <svg className="w-6 h-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
             </svg>
             <span className="text-lg font-bold text-gray-900">CourseStudy</span>
-          </div>
+          </Link>
           
           {/* Center - Copyright */}
           <div className="text-gray-600 text-sm">
