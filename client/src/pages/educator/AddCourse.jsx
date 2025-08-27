@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
-import { assets } from '../../assets/assets'
+import { Link, useNavigate } from 'react-router-dom'
 
 const AddCourse = () => {
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [courseData, setCourseData] = useState({
     title: '',
-    headings: '',
+    category: 'programming',
+    level: 'beginner',
+    duration: '',
     description: '',
+    learningOutcomes: '',
+    prerequisites: '',
     price: '0',
-    thumbnail: null
+    thumbnail: null,
+    tags: '',
+    language: 'english'
   });
 
   const handleInputChange = (field, value) => {
@@ -18,10 +26,24 @@ const AddCourse = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Course Data:', courseData);
-    // Handle course submission here
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log('Course Data:', courseData);
+      
+      // Show success message and redirect
+      alert('Course created successfully!');
+      navigate('/educator/my-courses');
+    } catch (error) {
+      console.error('Error creating course:', error);
+      alert('Failed to create course. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -103,108 +125,337 @@ const AddCourse = () => {
 
           {/* Add Course Form */}
           <div className="p-4 sm:p-6 lg:p-8">
-            <div className="max-w-3xl">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Add Course</h1>
+            <div className="max-w-4xl">
+              {/* Back Navigation Header */}
+              <div className="mb-6">
+                <Link 
+                  to="/educator" 
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Dashboard
+                </Link>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Create New Course</h1>
+                <p className="text-gray-600 mt-2">Fill in the details below to create your course</p>
+              </div>
               
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 {/* Course Title */}
                 <div>
                   <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-                    Course Title
+                    Course Title *
                   </label>
                   <input
                     type="text"
                     id="title"
                     value={courseData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    placeholder="Type here"
+                    placeholder="e.g., Complete Web Development Bootcamp 2024"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
                   />
+                  <p className="text-sm text-gray-500 mt-1">Choose a clear, descriptive title that captures the course content</p>
                 </div>
 
-                {/* Course Headings */}
-                <div>
-                  <label htmlFor="headings" className="block text-sm font-medium text-gray-700 mb-2">
-                    Course Headings
-                  </label>
-                  <input
-                    type="text"
-                    id="headings"
-                    value={courseData.headings}
-                    onChange={(e) => handleInputChange('headings', e.target.value)}
-                    placeholder="Type here"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                {/* Course Category and Level */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                      Category *
+                    </label>
+                    <select
+                      id="category"
+                      value={courseData.category}
+                      onChange={(e) => handleInputChange('category', e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="programming">Programming & Development</option>
+                      <option value="design">Design & Creative</option>
+                      <option value="business">Business & Entrepreneurship</option>
+                      <option value="marketing">Marketing & Sales</option>
+                      <option value="lifestyle">Lifestyle & Health</option>
+                      <option value="music">Music & Audio</option>
+                      <option value="photography">Photography & Video</option>
+                      <option value="academic">Academic & Science</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="level" className="block text-sm font-medium text-gray-700 mb-2">
+                      Skill Level *
+                    </label>
+                    <select
+                      id="level"
+                      value={courseData.level}
+                      onChange={(e) => handleInputChange('level', e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                      <option value="all-levels">All Levels</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Duration and Language */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">
+                      Course Duration *
+                    </label>
+                    <input
+                      type="text"
+                      id="duration"
+                      value={courseData.duration}
+                      onChange={(e) => handleInputChange('duration', e.target.value)}
+                      placeholder="e.g., 15 hours, 8 weeks"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="language" className="block text-sm font-medium text-gray-700 mb-2">
+                      Language *
+                    </label>
+                    <select
+                      id="language"
+                      value={courseData.language}
+                      onChange={(e) => handleInputChange('language', e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="english">English</option>
+                      <option value="spanish">Spanish</option>
+                      <option value="french">French</option>
+                      <option value="german">German</option>
+                      <option value="chinese">Chinese</option>
+                      <option value="hindi">Hindi</option>
+                    </select>
+                  </div>
                 </div>
 
                 {/* Course Description */}
                 <div>
                   <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                    Course Description
+                    Course Description *
                   </label>
                   <textarea
                     id="description"
                     rows={6}
                     value={courseData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
-                    placeholder="Type here"
+                    placeholder="Provide a comprehensive overview of what students will learn, the course structure, and what makes this course unique..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                    required
+                  />
+                  <p className="text-sm text-gray-500 mt-1">Write a compelling description that will attract students to your course</p>
+                </div>
+
+                {/* Learning Outcomes */}
+                <div>
+                  <label htmlFor="learningOutcomes" className="block text-sm font-medium text-gray-700 mb-2">
+                    Learning Outcomes *
+                  </label>
+                  <textarea
+                    id="learningOutcomes"
+                    rows={4}
+                    value={courseData.learningOutcomes}
+                    onChange={(e) => handleInputChange('learningOutcomes', e.target.value)}
+                    placeholder="By the end of this course, students will be able to:&#10;• Understand the fundamentals of...&#10;• Build practical projects...&#10;• Apply best practices..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                    required
+                  />
+                  <p className="text-sm text-gray-500 mt-1">List the specific skills and knowledge students will gain</p>
+                </div>
+
+                {/* Prerequisites */}
+                <div>
+                  <label htmlFor="prerequisites" className="block text-sm font-medium text-gray-700 mb-2">
+                    Prerequisites
+                  </label>
+                  <textarea
+                    id="prerequisites"
+                    rows={3}
+                    value={courseData.prerequisites}
+                    onChange={(e) => handleInputChange('prerequisites', e.target.value)}
+                    placeholder="What students should know before taking this course? (e.g., Basic programming knowledge, familiarity with HTML/CSS)"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
                   />
+                  <p className="text-sm text-gray-500 mt-1">Optional: List any prior knowledge or skills required</p>
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+                    Course Tags
+                  </label>
+                  <input
+                    type="text"
+                    id="tags"
+                    value={courseData.tags}
+                    onChange={(e) => handleInputChange('tags', e.target.value)}
+                    placeholder="e.g., javascript, react, web development, frontend"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <p className="text-sm text-gray-500 mt-1">Add relevant tags separated by commas to help students find your course</p>
                 </div>
 
                 {/* Course Price */}
                 <div>
                   <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                    Course Price
+                    Course Price *
                   </label>
-                  <input
-                    type="number"
-                    id="price"
-                    value={courseData.price}
-                    onChange={(e) => handleInputChange('price', e.target.value)}
-                    min="0"
-                    step="0.01"
-                    className="w-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                      <input
+                        type="number"
+                        id="price"
+                        value={courseData.price}
+                        onChange={(e) => handleInputChange('price', e.target.value)}
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        className="w-40 pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="pricing"
+                          value="free"
+                          checked={courseData.price === '0'}
+                          onChange={() => handleInputChange('price', '0')}
+                          className="text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700">Free Course</span>
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="pricing"
+                          value="paid"
+                          checked={courseData.price !== '0'}
+                          onChange={() => handleInputChange('price', '')}
+                          className="text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700">Paid Course</span>
+                      </label>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">Set to $0 for free courses or enter your desired price</p>
                 </div>
 
                 {/* Course Thumbnail */}
-    <div>
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Course Thumbnail
+                    Course Thumbnail *
                   </label>
-                  <div className="flex items-center gap-4">
-                    <button
-                      type="button"
-                      className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
-                      Upload
-                    </button>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        Choose Image
+                      </button>
+                      
+                      <div className="text-sm text-gray-600">
+                        <p>Recommended: 1280x720 pixels</p>
+                        <p>Max file size: 5MB (JPG, PNG)</p>
+                      </div>
+                    </div>
                     
                     {/* Thumbnail Preview */}
-                    {courseData.thumbnail ? (
-                      <div className="w-20 h-20 bg-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300">
-                        <span className="text-green-600 text-xs text-center">Thumbnail</span>
-                      </div>
-                    ) : (
-                      <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-                        <span className="text-gray-400 text-xs text-center">No image</span>
-                      </div>
-                    )}
+                    <div className="w-full max-w-md">
+                      {courseData.thumbnail ? (
+                        <div className="relative">
+                          <img
+                            src={courseData.thumbnail}
+                            alt="Course thumbnail preview"
+                            className="w-full h-48 object-cover rounded-lg border-2 border-green-300"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleInputChange('thumbnail', null)}
+                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="w-full h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center">
+                          <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <p className="text-gray-500 text-sm">No thumbnail selected</p>
+                          <p className="text-gray-400 text-xs">Click "Choose Image" to upload</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Submit Button */}
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors font-medium"
-                  >
-                    ADD
-                  </button>
+                {/* Submit Buttons */}
+                <div className="pt-6 border-t border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <Link
+                      to="/educator"
+                      className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    >
+                      Cancel
+                    </Link>
+                    
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          // Save as draft functionality
+                          console.log('Saving as draft...');
+                          alert('Course saved as draft!');
+                        }}
+                        className="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                      >
+                        Save as Draft
+                      </button>
+                      
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center gap-2"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Creating Course...
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Create Course
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
