@@ -4,92 +4,127 @@ import Navbar from '../../components/student/Navbar'
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
+      {/* Decorative Background Shapes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating Circles */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-indigo-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        
+        {/* Geometric Shapes */}
+        <div className="absolute top-1/4 right-1/3 w-32 h-32 bg-gradient-to-br from-blue-500/30 to-cyan-500/30 transform rotate-45 rounded-lg blur-sm"></div>
+        <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-gradient-to-br from-purple-500/30 to-pink-500/30 transform -rotate-12 rounded-full blur-sm"></div>
+        <div className="absolute top-1/2 left-1/2 w-20 h-20 bg-gradient-to-br from-indigo-500/30 to-blue-500/30 transform rotate-12 rounded-lg blur-sm"></div>
+      </div>
+
+
       <Navbar />
+      
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 relative z-10">
         {/* Hero Section */}
-        <div className="text-center">
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Empower your future with the courses designed to{' '}
-            <span className="text-blue-600 relative">
-              fit your choice.
-              <svg 
-                className="absolute -bottom-2 left-0 w-full" 
-                viewBox="0 0 400 20" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path 
-                  d="M2 18C50 8 150 2 250 8C350 14 398 18 398 18" 
-                  stroke="#2563eb" 
-                  strokeWidth="3" 
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              </svg>
-            </span>
-          </h1>
-          
-          {/* Decorative curved blue line */}
-          <div className="mb-8">
-            <svg className="w-full max-w-2xl mx-auto" viewBox="0 0 400 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path 
-                d="M20 20C100 15 200 10 300 15C350 17 380 20 380 20" 
-                stroke="#2563eb" 
-                strokeWidth="2" 
-                strokeLinecap="round"
-                fill="none"
-              />
-            </svg>
+        <div className="text-center relative">
+          {/* Main Headline with Enhanced Styling */}
+          <div className="relative mb-8">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-900 mb-6 leading-tight">
+              Empower your future with the courses designed to{' '}
+              <span className="relative">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
+                  fit your choice.
+                </span>
+                {/* Enhanced Underline with Gradient */}
+                <div className="absolute -bottom-3 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 rounded-full transform scale-x-0 animate-pulse"></div>
+              </span>
+            </h1>
+            
+            {/* Decorative Elements */}
+            <div className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full opacity-20 blur-sm"></div>
+            <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-indigo-400 to-cyan-400 rounded-full opacity-20 blur-sm"></div>
           </div>
           
-          {/* Sub-text */}
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-            We bring together world-class instructors, interactive content, and a supportive community to help you achieve your personal and professional goals.
+          {/* Enhanced Sub-text with Better Typography */}
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-700 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
+            We bring together <span className="text-blue-600 font-semibold">world-class instructors</span>,{' '}
+            <span className="text-purple-600 font-semibold">interactive content</span>, and a{' '}
+            <span className="text-indigo-600 font-semibold">supportive community</span> to help you achieve your personal and professional goals.
           </p>
           
-          {/* Search Bar */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-xl mx-auto mb-16">
-            <div className="relative flex-1 w-full sm:w-auto">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          {/* Enhanced Search Bar with Glass Morphism */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto mb-20">
+            <div className="relative flex-1 w-full sm:w-auto group">
+              <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <svg className="h-6 w-6 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
               <input
                 type="text"
-                placeholder="Search for courses"
-                className="w-full pl-12 pr-4 py-4 text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                placeholder="Search for courses..."
+                className="w-full pl-14 pr-6 py-5 text-gray-900 bg-white/80 backdrop-blur-sm border border-white/50 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 focus:border-transparent shadow-xl hover:shadow-2xl transition-all duration-300 text-lg"
               />
             </div>
-            <button className="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-sm">
-              Search
+            <button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105">
+              <span className="flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Search
+              </span>
             </button>
           </div>
         </div>
 
-        {/* Trusted by learners section */}
-        <div className="text-center mb-16">
-          <p className="text-gray-600 mb-6">Trusted by learners from</p>
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-            <img src={assets.microsoft_logo} alt="Microsoft" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
-            <img src={assets.walmart_logo} alt="Walmart" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
-            <img src={assets.accenture_logo} alt="Accenture" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
-            <img src={assets.adobe_logo} alt="Adobe" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
-            <img src={assets.paypal_logo} alt="PayPal" className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity" />
+        {/* Enhanced Trusted by learners section */}
+        <div className="text-center mb-20 relative">
+          {/* Background Decoration */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-3xl blur-sm"></div>
+          
+          <div className="relative bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl">
+            <p className="text-gray-700 mb-8 text-lg font-semibold">Trusted by learners from leading companies worldwide</p>
+            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+              <div className="group p-4 bg-white/80 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src={assets.microsoft_logo} alt="Microsoft" className="h-10 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-300" />
+              </div>
+              <div className="group p-4 bg-white/80 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src={assets.walmart_logo} alt="Walmart" className="h-10 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-300" />
+              </div>
+              <div className="group p-4 bg-white/80 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src={assets.accenture_logo} alt="Accenture" className="h-10 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-300" />
+              </div>
+              <div className="group p-4 bg-white/80 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src={assets.adobe_logo} alt="Adobe" className="h-10 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-300" />
+              </div>
+              <div className="group p-4 bg-white/80 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <img src={assets.paypal_logo} alt="PayPal" className="h-10 md:h-12 opacity-70 group-hover:opacity-100 transition-all duration-300" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Learn from the best section */}
-        <div className="mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Learn from the best</h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our top-rated courses across various categories. From coding and design to business and wellness, our courses are crafted to deliver results.
-            </p>
-          </div>
+        {/* Enhanced Learn from the best section */}
+        <div className="mb-20 relative">
+          {/* Section Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 via-purple-50/50 to-indigo-50/50 rounded-3xl blur-sm"></div>
+          
+          <div className="relative bg-white/70 backdrop-blur-sm rounded-3xl p-12 border border-white/50 shadow-xl">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 5.477 5.754 5 7.5 5s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.523 18.246 19 16.5 19c-1.746 0-3.332-.477-4.5-1.253" />
+                  </svg>
+                </div>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-900">
+                  Learn from the best
+                </h2>
+              </div>
+              <p className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto font-medium leading-relaxed">
+                Discover our <span className="text-blue-600 font-semibold">top-rated courses</span> across various categories. From{' '}
+                <span className="text-purple-600 font-semibold">coding and design</span> to{' '}
+                <span className="text-indigo-600 font-semibold">business and wellness</span>, our courses are crafted to deliver exceptional results.
+              </p>
+            </div>
           
           {/* Course Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
@@ -357,7 +392,8 @@ const Home = () => {
         </div>
       </footer>
     </div>
-  )
+    </div>
+  );
 }
 
-export default Home
+export default Home;
