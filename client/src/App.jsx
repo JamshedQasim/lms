@@ -25,7 +25,7 @@ import Signup from "./pages/student/Signup";
 const App = () => {
   return (
     <ThemeProvider>
-      <div className='text-default min-h-screen bg-white dark:bg-gray-900 dark:text-white transition-colors duration-300'>
+      <div className='text-default min-h-screen bg-white dark:bg-gray-900 dark:text-white transition-all duration-300'>
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/Course-list' element={<CoursesList/>}/>

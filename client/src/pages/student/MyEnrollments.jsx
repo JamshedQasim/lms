@@ -92,17 +92,17 @@ const MyEnrollments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-300">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         {/* Welcome Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-900 mb-3">
+              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-900 dark:from-white dark:via-blue-200 dark:to-indigo-200 mb-3 transition-colors duration-300">
                 Welcome back, {user?.name || 'Student'}! 👋
               </h1>
-              <p className="text-lg text-gray-700">
+              <p className="text-lg text-gray-700 dark:text-gray-300 transition-colors duration-300">
                 Here are your enrolled courses and learning progress
               </p>
             </div>
@@ -130,9 +130,9 @@ const MyEnrollments = () => {
         </div>
 
         {/* Enrolled Courses Section */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-gray-700/50 shadow-xl p-8 mb-8 transition-all duration-300">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3 transition-colors duration-300">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 dark:from-blue-400 dark:to-purple-400 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 5.477 5.754 5 7.5 5s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.523 18.246 19 16.5 19c-1.746 0-3.332-.477-4.5-1.253" />
               </svg>
@@ -142,11 +142,11 @@ const MyEnrollments = () => {
           
           {loading ? (
             <div className="flex items-center justify-center py-16">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 dark:border-blue-400"></div>
             </div>
           ) : error ? (
             <div className="text-center py-12">
-              <div className="text-red-600 mb-4 text-lg">{error}</div>
+              <div className="text-red-600 dark:text-red-400 mb-4 text-lg">{error}</div>
               <button 
                 onClick={fetchEnrolledCourses}
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
@@ -157,7 +157,7 @@ const MyEnrollments = () => {
           ) : enrolledCourses && enrolledCourses.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {enrolledCourses.map((course, index) => (
-                <div key={course._id || index} className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div key={course._id || index} className="group bg-white dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-600 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                   {/* Course Image */}
                   <div className="relative overflow-hidden">
                     <img 
@@ -187,10 +187,10 @@ const MyEnrollments = () => {
 
                   {/* Course Content */}
                   <div className="p-6">
-                    <h3 className="font-bold text-gray-900 mb-3 text-xl line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
+                    <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-xl line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
                       {course.title || `Course ${index + 1}`}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 leading-relaxed">
                       {course.description || 'Course description'}
                     </p>
                     
